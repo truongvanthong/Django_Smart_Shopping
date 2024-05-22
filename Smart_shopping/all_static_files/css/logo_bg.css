@@ -1,0 +1,56 @@
+.frame-child,
+.intelligent-purchase-child {
+  height: 75px;
+  width: 1449px;
+  position: relative;
+  background-color: var(--color-yellow);
+  display: none;
+  max-width: 100%;
+}
+.logo_background {
+  height: 66px;
+  width: 1440px;
+  background-color: var(--color-khaki);
+}
+.intellipurchase {
+  margin: 0;
+  width: 415px;
+  position: relative;
+  font-size: inherit;
+  font-weight: 100;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+  max-width: 100%;
+  z-index: 2;
+}
+.intelligent-purchase,
+.rectangle-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.intelligent-purchase {
+  flex: 1;
+  background-color: var(--color-khaki);
+  padding: 6px 20px 12px;
+  z-index: 1;
+  text-align: left;
+  font-size: 40px;
+  color: var(--color-black);
+  font-family: var(--font-roboto);
+}
+.rectangle-parent {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: var(--color-yellow);
+  width: 100%;
+  padding: 0 0 9px;
+  z-index: 99;
+}

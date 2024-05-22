@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Đăng ký</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
+    <style>
+        .gradient-custom-3 {
+            background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="vh-100 gradient-custom-3">
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card shadow-2">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Tạo tài khoản</h2>
+
+                                <form class = 'mx-1 mx-md-4' method = 'POST' action =''>
+                                {% csrf_token %}
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        {{ form.username }}
+                                    </div>
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        {{ form.email }}
+                                    </div>
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        {{ form.first_name }}
+                                    </div>
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        {{ form.last_name }}
+                                    </div>
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        {{ form.password1 }}
+                                    </div>
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        {{ form.password2 }}
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-success btn-lg">Đăng kí</button>
+                                    </div>
+
+                                    <p class="text-center text-muted mt-5 mb-0">Bạn đã có tài khoản? <a href="{% url 'login' %}" class="fw-bold text-body"><u>Đăng nhập tại đây</u></a></p>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1549 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main-content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>So sánh sản phẩm</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bundle.mainaa47.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/header.footer.css' %}" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+    <script src="{% static 'js/heart.js' %}"></script>
+    <!-- <script src="{% static 'js/submit.js' %}"></script> -->
+    <!-- <script src="{% static 'js/update.js' %}"></script> -->
+
+</head>
+
+<body>
+
+    <!-- <header class="fs-header">
+        <div class="f-hdtop">
+            <div class="f-wrap">
+                <a href="/">
+                    <span class="logo_name">INTELLIPURCHASE</span>
+                </a>
+                <ul class="fs-hdmn">
+                    {% if request.user.is_authenticated %}
+                        <a href="/account.html" title="Tài khoản của tôi">
+                            <span class="lg-name-view">Hello: {{ request.user }}</span>
+                        </a>
+                    {% else %}
+                        <a href="/login/" title="Tài khoản của tôi">
+                            <span class="lg-name-view">Đăng nhập/Đăng kí</span>
+                        </a>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </header> -->
+    
+    <div class="over-suggest"></div>
+    <style>
+        .lg-name-view {
+            color: rgb(255, 255, 255);
+            margin: 12px 0 0 0; /* Thêm đơn vị đo(px) cho margin-top */
+            width: 415px;
+            font-size: 0.4em;
+            font-weight: 10; /* font-weight thường được chỉ định bằng các giá trị số từ 100 đến 900 */
+            text-align: right;
+            display: flex;
+            align-items: center; /* Hiển thị về giữa theo chiều dọc */
+            justify-content: flex-end; /* Hiển thị bên phải theo chiều ngang */
+            max-width: 100%;
+        }
+        .f-hdtop {
+            background-color: red;
+        }
+        .logo_name {
+            color:rgb(255, 225, 0);
+            margin: 0;
+            width: 415px;
+            position: relative;
+            font-size: inherit;
+            font-weight: 100;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+            max-width: 100%;
+            z-index: 2;
+        }
+
+        .f-wrap {
+            text-align: left;
+            font-size: 40px;
+            color: #000;
+        }
+
+        .fs-hdmn>li>a .user-img {
+            width: 24px;
+            height: 24px;
+            margin: auto;
+            position: relative
+        }
+
+        .fs-hdmn>li>a .user-img.noti::before {
+            position: absolute;
+            content: '';
+            top: 0;
+            right: -1px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #efb140;
+            z-index: 1
+        }
+
+        .fs-hdmn>li>a .user-img.active i {
+            display: none
+        }
+
+        .fs-hdmn>li>a .user-img.active .ava-user {
+            display: flex;
+            justify-content: center
+        }
+
+        .fs-hdmn>li>a .ava-user {
+            text-align: center;
+            display: none
+        }
+
+        .fs-hdmn>li>a .ava-user img {
+            max-width: 100%;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px
+        }
+
+        .fs-hdmn>li>a .user-img.noti::before {
+            position: absolute;
+            content: '';
+            top: 0;
+            right: -1px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #efb140;
+            z-index: 1
+        }
+
+        .fs--sub-user i.ic-noti {
+            position: relative
+        }
+
+        .fs--sub-user i.ic-noti.active:after {
+            position: absolute;
+            content: '';
+            top: -2px;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #cb1c22;
+            z-index: 1
+        }
+
+        .mf-vhiditem {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px
+        }
+
+        .sg-p {
+            padding: 4px 16px 4px
+        }
+
+        .m-r-8 {
+            margin-right: 8px
+        }
+
+        .m-b-4 {
+            margin-bottom: 4px
+        }
+
+        .icon-search {
+            color: #fff;
+            font-size: 28px
+        }
+
+        .icon-cance {
+            position: absolute;
+            z-index: 1;
+            color: #a2a2a2;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            padding-right: 68px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        .line {
+            height: 1px;
+            margin: 4px 16px;
+            background-color: #e7e6e6
+        }
+
+        .fs-search form {
+            width: 496px
+        }
+
+        .suggest .sub-cate {
+            color: #495057
+        }
+
+        .pr-item {
+            display: flex;
+            justify-content: space-between
+        }
+
+        .pr-item__info {
+            flex: 1
+        }
+
+        .pr-item__info a[class*="btn-"] {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.43;
+            color: #6c757d
+        }
+
+        .pr-item__img {
+            width: 60px;
+            height: 60px
+        }
+
+        .fs-result-box:not(:last-child) {
+            margin-bottom: 16px
+        }
+
+        .pr-item__name,
+        .pr-item__name a {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: normal;
+            color: #0168fa;
+            display: -webkit-box !important;
+            overflow: hidden;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            word-break: break-word
+        }
+
+        .pr-item__name em,
+        .pr-item__name .highlight {
+            font-style: normal;
+            font-weight: 700
+        }
+
+        .pr-item__price {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 24px;
+            color: #cb1c22;
+            text-align: left
+        }
+
+        .pr-item__price .deal {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #919191
+        }
+
+        .fs-header {
+            z-index: 100
+        }
+
+        .fs-search-result {
+            line-height: 28px;
+            font-weight: 400;
+            color: #495057
+        }
+
+        ol {
+            list-style: none
+        }
+
+        .over-suggest {
+            opacity: 0;
+            visibility: hidden;
+            position: fixed;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            opacity: .7;
+            background-color: rgba(0, 0, 0, .7);
+            width: 100%;
+            height: 100%;
+            transition: all .3s;
+            z-index: 98
+        }
+
+        .ais-Highlight-highlighted {
+            font-weight: 700;
+            color: inherit
+        }
+
+        .fs-search>form>button {
+            z-index: 2
+        }
+
+        .fs-suggest-tags {
+            margin-top: 4px
+        }
+
+        .suggest-left {
+            width: 350px;
+            padding: 8px 0
+        }
+
+        .suggest-right {
+            padding-bottom: 8px
+        }
+
+        .suggest-right .suggest-title {
+            margin-bottom: 0
+        }
+
+        .fs-suggest-tags ul {
+            max-height: 50px;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            columns: unset !important;
+            -webkit-columns: unset !important;
+            -moz-columns: unset !important;
+            padding: 0 4px
+        }
+
+        .fs-suggest-tags ul li {
+            width: 50%;
+            padding: 4px 4px 4px 12px
+        }
+
+        .fs-suggest-tags ul .sg-p a {
+            font-size: 14px;
+            line-height: 20px
+        }
+
+        .f-hdtop {
+            z-index: 100
+        }
+
+        .fs-header .f-hdtop .f-wrap {
+            overflow: unset !important
+        }
+
+        .fs-menu .f-wrap {
+            background: #252525
+        }
+
+        .fs-search>form>input {
+            padding: 0 0 0 16px
+        }
+
+        .fs-search>form>input:focus {
+            border-bottom-left-radius: 0
+        }
+
+        .fs-stxt:focus {
+            outline: none
+        }
+
+        .fpt-sale .sale-cd-timer {
+            font-family: inherit;
+            text-shadow: unset
+        }
+
+        .fpt-sale .sale-cd-timer ul li .cd-tm {
+            font-weight: 700
+        }
+
+        .fs-mnsub {
+            z-index: 60
+        }
+
+        .fpt-sale,
+        .banner-cs,
+        .fs-bnord,
+        .section-box,
+        .fs-bxh,
+        .category-container,
+        .main.main-wrapper:before,
+        .main.main-wrapper:after {
+            z-index: 2 !important
+        }
+
+        main.main-wrapper:after,
+        main.main-wrapper:before {
+            z-index: 1 !important
+        }
+
+        .modal-header>div {
+            font-size: 24px;
+            line-height: 32px
+        }
+
+        @media (max-width:768px) {
+            .modal-header>div {
+                font-size: 18px;
+                line-height: 18px
+            }
+        }
+
+        .fs-mnstit a {
+            color: #3d3d3d
+        }
+
+        .base-ic .ic-th-list:before {
+            content: "\e91f"
+        }
+
+        .base-ic .ic-noti:before {
+            content: "\e91d"
+        }
+
+        .base-ic .ic-eye:before {
+            content: "\e91e"
+        }
+
+        .base-ic .ic-chat:before {
+            content: "\e920"
+        }
+    </style>
+
+    <main class="l-main">
+        <div class="l-pc">
+            <div class="l-pc-header">
+                <div class="g-container">
+                    <div class="row">
+                        <ol class="breadcrumb breadcrumb-margin">
+                            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">So sánh</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="g-container">
+                    <div class="l-pc-top">
+                        <h1 class="l-pc-heading typo-headline text-center text-color-heading text-size--lg">
+                            So sánh
+                            <strong class="text-size--lg l-pc-name product1_name"> {{product1.product_name}} </strong>
+                            <span class="text-size--lg typo-headline text-color-sub">vs</span>
+                            <strong class="l-pc-name text-size--lg product2_name"> {{product2.product_name}} </strong>
+                        </h1>
+                        <form class = 'test' method = 'POST' action =''>
+                            {% csrf_token %}
+                            <div class="l-pc-row l-pc-select">
+                                <div class="l-pc-product">
+                                    <div class="cs-search--lg js--search-product">
+                                        <div class="cs-search-group">
+                                            <input type="text" value="" placeholder="Nhập tên sản phẩm cần so sánh" id="searchpr1" name="searchpr1"
+                                                class="cs-search-input js--input-w-product typo-text--large text-color-normal">
+                                            <div class="search-results-1 dropdown-content"></div>
+                                        </div>
+                                        <ul class="cs-search-suggest js--suggestion-w-product proff">
+                                        </ul>
+                                    </div>
+                                    <div class="c-pc-product text-center">
+                                        <div class="c-pc-product__img">
+                                            <img src="{{ product1.image }}" alt="{{ product1.product_name }}">
+                                        </div>
+                                        {% if product1_brand %}
+                                            <div class="c-pc-product__price typo-into-elevated text-color-normal">
+                                                Chỉ từ
+                                                <strong class="typo-headline price ">{{product1_min_price}}</strong>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="l-pc-line">
+                                    <div class="line-ct">
+                                        <button id="submitBtn">So sánh</button>
+                                        <hr>
+                                        <div class="circle-container" id="heart-container" data-product1-id="{{ product1.product_id }}" data-product2-id="{{ product2.product_id }}">
+                                            <div class="circle" id="heart-button">
+                                                {% if request.user.is_authenticated %}
+                                                    <img src="{% static 'img/heart-off.png' %}" alt="Heart" id="heart-img">
+                                                {% else %}
+                                                    VS
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <script>
+                                            $(document).ready(function () {
+                                                // Bắt sự kiện click nút submit
+                                                $("#submitBtn").click(function () {
+                                                    // Lấy giá trị từ ô tìm kiếm 1 và 2
+                                                    var searchpr1 = $('#searchpr1').val();
+                                                    var searchpr2 = $('#searchpr2').val();
+
+                                                    // Gửi yêu cầu POST
+                                                    $.ajax({
+                                                        url: "{% url 'recent_history' %}", // Địa chỉ URL của endpoint xử lý tìm kiếm
+                                                        method: 'POST',
+                                                        data: {
+                                                            'product1_name': searchpr1, // Truyền giá trị của ô tìm kiếm 1
+                                                            'product2_name': searchpr2, // Truyền giá trị của ô tìm kiếm 2
+                                                            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val() // Đảm bảo gửi CSRF token
+                                                        },
+                                                        success: function (data) {
+                                                            // Xử lý dữ liệu trả về nếu cần
+                                                            console.log(data);
+                                                        },
+                                                        error: function (xhr, errmsg, err) {
+                                                            // Xử lý lỗi nếu có
+                                                            console.log(xhr.status + ": " + xhr.responseText);
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+                                        <style>
+                                            .circle-container {
+                                                position: absolute;
+                                                width: 50px; /* Kích thước vòng tròn */
+                                                height: 50px; /* Kích thước vòng tròn */
+                                                top: 50%;
+                                                left: 50%;
+                                                transform: translate(-50%, -50%);
+                                            }
+
+                                            .circle {
+                                                border-radius: 1000px; /* Độ cong lớn */
+                                                border: solid 1px #cbd1d6;
+                                                background-color: #fff;
+                                                width: 100%;
+                                                height: 100%;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                cursor: pointer;
+                                            }
+
+                                            .circle img {
+                                                width: 80%; /* Độ rộng hình ảnh */
+                                                height: auto;
+                                            }
+
+                                            .circle {
+                                                color: #939ca3;
+                                                position: absolute;
+                                                border-radius: 1000px;
+                                                border: solid 1px #cbd1d6;
+                                                background-color: #fff;
+                                                width: 50px;
+                                                height: 50px;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                top: 50%;
+                                                left: 50%;
+                                                transform: translate(-50%, -50%)
+                                            }
+                                        </style>
+                                    </div>
+                                </div>
+                                <div class="l-pc-product">
+                                    <div class="cs-search--lg js--search-product">
+                                        <div class="cs-search-group">
+                                            <input type="text" value="" placeholder="Nhập tên sản phẩm cần so sánh" id="searchpr2" name="searchpr2"
+                                                class="cs-search-input js--input-w-product typo-text--large text-color-normal">
+                                            <div class="search-results-2 dropdown-content"></div>
+                                        </div>
+                        </form>
+                                    <ul class="cs-search-suggest js--suggestion-w-product prola">
+                                    </ul>
+                                </div>
+                                <div class="c-pc-product text-center">
+                                    <div class="c-pc-product__img">
+                                        <img src="{{ product2.image }}" alt="{{ product2.product_name }}">
+                                    </div>
+                                    {% if product1_brand %}
+                                        <div class="c-pc-product__price typo-into-elevated text-color-normal">
+                                            Chỉ từ
+                                            <strong class="typo-headline price ">{{ product2_min_price }}</strong>
+                                        </div>
+                                    {% endif %}
+                                    <div class="swiper-container js--pd-slider swiper-custom"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="l-pc-body">
+            <div class="l-pc-container">
+                <div class="l-pc-main">
+                    <div class="l-pc-container">
+                        <div class="compare-detail">
+                            <div class="c-compare__row js--collapse-detail" id="data-Thngtinhngha">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Th&#xF4;ng tin h&#xE0;ng h&#xF3;a</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">Th&#x1B0;&#x1A1;ng hi&#x1EC7;u</div>
+                                            <div class="detail">
+                                                {{product1_brand}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_brand}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Th&#x1EDD;i &#x111;i&#x1EC3;m ra m&#x1EAF;t</div>
+                                            <div class="detail">
+                                                {{product1_release_date}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_release_date}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">H&#x1B0;&#x1EDB;ng d&#x1EAB;n b&#x1EA3;o qu&#x1EA3;n</div>
+                                            <div class="detail">
+                                                {% if product1_brand %}
+                                                    &#x110;&#x1EC3; n&#x1A1;i kh&#xF4; r&#xE1;o, nh&#x1EB9; tay, d&#x1EC5;
+                                                    v&#x1EE1;.
+                                                {% endif %}
+                                            </div>
+                                            <div class="detail">
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">H&#x1B0;&#x1EDB;ng d&#x1EAB;n s&#x1EED; d&#x1EE5;ng</div>
+                                            <div class="detail">
+                                                {% if product1_brand %}
+                                                    Xem trong s&#xE1;ch h&#x1B0;&#x1EDB;ng d&#x1EAB;n s&#x1EED; d&#x1EE5;ng
+                                                {% endif %}
+                                            </div>
+                                            <div class="detail">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-ThitkTrnglng">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Thi&#x1EBF;t k&#x1EBF; &amp; Tr&#x1ECD;ng l&#x1B0;&#x1EE3;ng</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop"> Dài </div>
+                                            <div class="detail">
+                                                {{product1_height}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_height}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop"> Ngang </div>
+                                            <div class="detail">
+                                                {{product1_width}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_width}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop"> Dày </div>
+                                            <div class="detail">
+                                                {{product1_depth}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_depth}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Tr&#x1ECD;ng l&#x1B0;&#x1EE3;ng s&#x1EA3;n ph&#x1EA9;m
+                                            </div>
+                                            <div class="detail">
+                                                {{product1_weight}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_weight}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Chu&#x1EA9;n kh&#xE1;ng n&#x1B0;&#x1EDB;c / B&#x1EE5;i
+                                                b&#x1EA9;n</div>
+                                            <div class="detail">
+                                                {{product1_water_resistant}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_water_resistant}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Bxl">
+                                <div class="c-compare__title">
+                                    <h2 class="title">B&#x1ED9; x&#x1EED; l&#xFD;</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">Phi&#xEA;n b&#x1EA3;n CPU</div>
+                                            <div class="detail">
+                                                {{product1_cpu}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_cpu}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop"> Tốc độ CPU </div>
+                                            <div class="detail">
+                                                {{product1_cpu_speed}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_cpu_speed}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Chip đồ họa (GPU)</div>
+                                            <div class="detail">
+                                                {{product1_gpu}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_gpu}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-RAM">
+                                <div class="c-compare__title">
+                                    <h2 class="title">RAM</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">RAM</div>
+                                            <div class="detail">
+                                                {{product1_ram}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_ram}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Mnhnh">
+                                <div class="c-compare__title">
+                                    <h2 class="title">M&#xE0;n h&#xEC;nh</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">K&#xED;ch th&#x1B0;&#x1EDB;c m&#xE0;n h&#xEC;nh</div>
+                                            <div class="detail">
+                                                {{product1_screen_size}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_screen_size}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">C&#xF4;ng ngh&#x1EC7; m&#xE0;n h&#xEC;nh</div>
+                                            <div class="detail">
+                                                {{product1_screen_tech}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_screen_tech}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Chu&#x1EA9;n m&#xE0;n h&#xEC;nh</div>
+                                            <div class="detail">
+                                                {{product1_screen_std}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_screen_std}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">&#x110;&#x1ED9; ph&#xE2;n gi&#x1EA3;i</div>
+                                            <div class="detail">
+                                                {{product1_screen_res}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_screen_res}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">T&#x1EA7;n s&#x1ED1; qu&#xE9;t</div>
+                                            <div class="detail">
+                                                {{product1_refresh_rate}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_refresh_rate}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Ch&#x1EA5;t li&#x1EC7;u m&#x1EB7;t k&#xED;nh</div>
+                                            <div class="detail">
+                                                {{product1_glass}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_glass}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Lutr">
+                                <div class="c-compare__title">
+                                    <h2 class="title">L&#x1B0;u tr&#x1EEF;</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">B&#x1ED9; nh&#x1EDB; trong</div>
+                                            <div class="detail">
+                                                {{product1_rom}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_rom}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Danh b&#x1EA1; l&#x1B0;u tr&#x1EEF;</div>
+                                            <div class="detail">
+                                                {{product1_danhba}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_danhba}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Th&#x1EBB; nh&#x1EDB; ngo&#xE0;i</div>
+                                            <div class="detail">
+                                                {{product1_sdcard}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_sdcard}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Camerasau">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Camera sau</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">Độ phân giải</div>
+                                            <div class="detail">
+                                                {{product1_rear_cam}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_rear_cam}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Quay phim</div>
+                                            <div class="detail">
+                                                {% for feature in product1_rear_cam_video %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="detail">
+                                                {% for feature in product2_rear_cam_video %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Đèn Flash</div>
+                                            <div class="detail">
+                                                {{product1_rear_cam_flash}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_rear_cam_flash}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Tính năng</div>
+                                            <div class="detail">
+                                                {% for feature in product1_rear_cam_features %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="detail">
+                                                {% for feature in product2_rear_cam_features %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Selfie">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Selfie</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">Độ phân giải</div>
+                                            <div class="detail">
+                                                {{product1_front_cam}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_front_cam}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Tính năng</div>
+                                            <div class="detail">
+                                                {% for feature in product1_front_cam_features %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="detail">
+                                                {% for feature in product2_front_cam_features %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Bomt">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Bảo mật</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li class="list-col">
+                                            <div class="prop">
+                                                Bảo mật
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product1_security %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product1_security %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Giaotipktni">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Giao ti&#x1EBF;p &amp; k&#x1EBF;t n&#x1ED1;i</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li class="list-col">
+                                            <div class="prop">Mạng di động</div>
+                                            <div class="detail">
+                                                {{product1_network}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_network}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">SIM</div>
+                                            <div class="detail">
+                                                {{product1_sim}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_sim}}
+                                            </div>
+                                        </li>
+                                        <li class="list-col">
+                                            <div class="prop"> Wifi </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product1_wifi %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product2_wifi %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">GPS</div>
+                                            <div class="detail">
+                                                {% for feature in product1_gps %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="detail">
+                                                {% for feature in product2_gps %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                        <li class="list-col">
+                                            <div class="prop"> Bluetooth </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product1_bluetooth %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product2_bluetooth %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Cổng kết nối/sạc</div>
+                                            <div class="detail">
+                                                {% for feature in product1_port %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="detail">
+                                                {% for feature in product2_port %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Jack tai nghe</div>
+                                            <div class="detail">
+                                                {{product1_headphone}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_headphone}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Kết nối khác</div>
+                                            <div class="detail">
+                                                {% for feature in product1_oth_connect %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="detail">
+                                                {% for feature in product2_oth_connect %}
+                                                    {{feature}}
+                                                    <br>
+                                                {% endfor %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-ThngtinpinSc">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Th&#xF4;ng tin pin &amp; S&#x1EA1;c</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">Dung l&#x1B0;&#x1EE3;ng pin</div>
+                                            <div class="detail">
+                                                {{product1_battery_capacity}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_battery_capacity}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Loại pin</div>
+                                            <div class="detail">
+                                                {{product1_battery_type}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_battery_type}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Hỗ trợ sạc tối đa</div>
+                                            <div class="detail">
+                                                {{product1_battery_charging}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_battery_charging}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Sạc kèm theo máy</div>
+                                            <div class="detail">
+                                                {{product1_changer_include}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_changer_include}}
+                                            </div>
+                                        </li>
+                                        <li class="list-col">
+                                            <div class="prop">
+                                                C&#xF4;ng ngh&#x1EC7; pin
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product1_battery_tech %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product2_battery_tech %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Hiuhnh">
+                                <div class="c-compare__title">
+                                    <h2 class="title">H&#x1EC7; &#x111;i&#x1EC1;u h&#xE0;nh</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">OS</div>
+                                            <div class="detail">
+                                                {{product1_os}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_os}}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="prop">Version</div>
+                                            <div class="detail">
+                                                {{product1_os_version}}
+                                            </div>
+                                            <div class="detail">
+                                                {{product2_os_version}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Phkintronghp">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Tính năng khác</h2>
+                                </div>
+                                <div class="c-compare__wrap">
+                                    <ul class="c-compare__table">
+                                        <li>
+                                            <div class="prop">Tính năng khác</div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product1_other_features %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            <div class="detail">
+                                                <ul>
+                                                    {% for feature in product2_other_features %}
+                                                        {{feature}}
+                                                        <br>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Giaban">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Giá bán</h2>
+                                </div>
+                                <div class="l-pc-row compare-product__group">
+                                    <div class="c-compare__product">
+                                        <div class="product-img" style="margin-top: 20px;">
+                                            <img src="{{product1.image}}" alt="{{product1.name}}">
+                                        </div>
+                                        <div class="product-info">
+                                            <div class="product-name"> {{product1.product_name}} </div>
+                                            <div class="product-price">
+                                                <img src="{% static 'img/tgdd.png' %}" alt="tgdd" class="tgdd-logo">
+                                                <div class="text">Chỉ từ</div>
+                                                <div class="price">
+                                                    {% if product1_tgdd_price is not None %}
+                                                        {{ product1_tgdd_price }}
+                                                    {% else %}
+                                                        Sản phẩm ngừng kinh doanh
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <a class="product-link"
+                                                href=" {{product1.TGDD_product_link}} ">Đến nơi bán <span class="carret"></span> </a>
+                                            <div class="product-price">
+                                                    <img src="{% static 'img/fpt.png' %}" alt="fpt" class="fpt-logo">
+                                                    <div class="text">Chỉ từ</div>
+                                                    <div class="price">
+                                                        {% if product1_fpt_price is not None %}
+                                                            {{ product1_fpt_price }}
+                                                        {% else %}
+                                                            Sản phẩm ngừng kinh doanh
+                                                        {% endif %}
+                                                    </div>
+                                            </div>
+                                            <a class="product-link"
+                                                href=" {{product1.FPT_product_link}} ">Đến nơi bán <span class="carret"></span> </a>
+                                        </div>
+                                    </div>
+                                    <div class="c-compare__product">
+                                        <div class="product-img" style="margin-top: 20px;">
+                                            <img src="{{product2.image}}" alt="{{product2.name}}">
+                                        </div>
+                                        <div class="product-info">
+                                            <div class="product-name"> {{product2.product_name}} </div>
+                                            <div class="product-price">
+                                                <img src="{% static 'img/tgdd.png' %}" alt="tgdd" class="tgdd-logo">
+                                                <div class="text">Chỉ từ</div>
+                                                <div class="price">
+                                                    {% if product2_tgdd_price is not None %}
+                                                        {{ product2_tgdd_price }}
+                                                    {% else %}
+                                                        Sản phẩm ngừng kinh doanh
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <a class="product-link"
+                                                href=" {{product2.TGDD_product_link}} ">Đến nơi bán <span class="carret"></span> </a>
+                                            <div class="product-price">
+                                                    <img src="{% static 'img/fpt.png' %}" alt="fpt" class="fpt-logo">
+                                                    <div class="text">Chỉ từ</div>
+                                                    <div class="price">
+                                                        {% if product2_fpt_price is not None %}
+                                                            {{ product2_fpt_price }}
+                                                        {% else %}
+                                                            Sản phẩm ngừng kinh doanh
+                                                        {% endif %}
+                                                    </div>
+                                            </div>
+                                            <a class="product-link"
+                                                href=" {{product2.FPT_product_link}} ">Đến nơi bán <span class="carret"></span> </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="c-compare__row js--collapse-detail" id="data-Giaban">
+                                <div class="c-compare__title">
+                                    <h2 class="title">Phân tích cảm xúc</h2>
+                                </div>
+                                <div class="l-pc-row compare-product__group">
+                                    <div class="c-compare__sa">
+                                        <div class="sa">{{product1_tgdd_sa | safe}}</div>
+                                        <img src="{% static 'img/tgdd.png' %}" alt="tgdd" class="tgdd-logo1">
+                                        <br>
+                                        <div class="sa">{{product1_fpt_sa | safe}}</div>
+                                        <img src="{% static 'img/fpt.png' %}" alt="fpt" class="fpt-logo1">
+                                    </div>
+                                    <hr class="vertical-line">
+                                    <div class="c-compare__sa">
+                                        <div class="sa">{{product2_tgdd_sa | safe}}</div>
+                                        <img src="{% static 'img/tgdd.png' %}" alt="tgdd" class="tgdd-logo1">
+                                        <br>
+                                        <div class="sa">{{product2_fpt_sa | safe}}</div>
+                                        <img src="{% static 'img/fpt.png' %}" alt="fpt" class="fpt-logo1">
+                                    </div>
+                                    <style>
+                                        .compare-product__group {
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                        }
+
+                                        .c-compare__sa {
+                                            display: flex;
+                                            flex-direction: column;
+                                            align-items: center;
+                                        }
+
+                                        .c-compare__sa .sa {
+                                            width: 600px;
+                                            height: 350px;
+                                            border: 1px solid #ccc; /* Biên cho biểu đồ */
+                                        }
+                                        
+                                        .vertical-line {
+                                            border: none;
+                                            border-left: 1px solid #ccc;
+                                            height: 700px; /* Chiều cao của các biểu đồ */
+                                            margin: 0 0px; /* Khoảng cách giữa đường kẻ và cột */
+                                        }
+                                    </style>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <style>
+        .lt-modal-otp .lt-modal-box .content-login p {
+            max-width: none
+        }
+    </style>
+
+    <style>
+        .tgdd-logo {
+            max-width: 20px; /* Độ rộng tối đa của hình ảnh */
+            height: auto; /* Chiều cao của hình ảnh tự điều chỉnh để giữ tỷ lệ */
+            margin-right: 10px; /* Khoảng cách bên phải giữa hình ảnh và văn bản */
+        }
+
+        .tgdd-logo1 {
+            max-width: 60px; /* Độ rộng tối đa của hình ảnh */
+            height: auto; /* Chiều cao của hình ảnh tự điều chỉnh để giữ tỷ lệ */
+            margin-right: 10px; /* Khoảng cách bên phải giữa hình ảnh và văn bản */
+        }
+
+        .fpt-logo {
+            max-width: 30px; /* Độ rộng tối đa của hình ảnh */
+            height: auto; /* Chiều cao của hình ảnh tự điều chỉnh để giữ tỷ lệ */
+            margin-left: -5px; /* Khoảng cách bên trái giữa hình ảnh và văn bản */
+            margin-right: 5px; /* Khoảng cách bên phải giữa hình ảnh và văn bản */
+        }
+
+        .fpt-logo1 {
+            max-width: 90px; /* Độ rộng tối đa của hình ảnh */
+            height: auto; /* Chiều cao của hình ảnh tự điều chỉnh để giữ tỷ lệ */
+            margin-left: -5px; /* Khoảng cách bên trái giữa hình ảnh và văn bản */
+            margin-right: 5px; /* Khoảng cách bên phải giữa hình ảnh và văn bản */
+        }
+
+        .l-pc-product {
+            display: inline-block; /* Hiển thị các sản phẩm trên cùng một hàng */
+            vertical-align: top; /* Đảm bảo chúng được căn chỉnh theo đỉnh */
+            width: 45%; /* Đảm bảo chúng không chiếm quá nhiều không gian */
+        }
+
+        .cs-search--lg {
+            margin: 0 auto; /* Canh giữa ô tìm kiếm */
+            text-align: center; /* Canh giữa nội dung trong ô tìm kiếm */
+        }
+
+        .cs-search--lg .cs-search-group input {
+            width: 100%; /* Chiếm toàn bộ chiều rộng của ô tìm kiếm */
+        }
+
+        .l-pc-line hr {
+            content: "";
+            height: 90%;
+            background: #e1e4e6;
+            width: 1px;
+            margin: 0;
+            margin: 50%; /* Tự động căn giữa theo chiều ngang */
+            position: absolute;
+            top: 50%; /* Đặt vị trí tại giữa theo chiều dọc */
+            transform: translateY(-50%);
+        }
+        
+        .dropdown-content:empty {
+            display: none; /* Ẩn dropdown-content khi nó rỗng */
+        }
+
+        .dropdown-content:not(:empty) {
+            position: absolute;
+            background-color: #ece9e9;
+            z-index: 1; /* Đảm bảo dropdown nằm trên hình ảnh */
+            padding: 10px; /* Khoảng cách giữa hình ảnh và khung hình ảnh */
+        }
+
+        .cs-search-input {
+            background-color: #f3f3f3;
+        }
+
+        a.tooltips {
+            outline: none
+        }
+
+        a.tooltips span {
+            z-index: 10;
+            display: none;
+            padding: 10px 15px;
+            margin-top: 30px;
+            margin-left: -160px;
+            width: 280px;
+            -moz-box-shadow: 0 0 5px 1px #ccc;
+            -webkit-box-shadow: 0 0 5px 1px #ccc;
+            box-shadow: 0 0 5px 1px #ccc
+        }
+
+        a.tooltips:hover span {
+            display: inline;
+            position: absolute;
+            border: 1px solid #ccc;
+            background: #fff
+        }
+
+        .fs-ftrtit {
+            font-size: 15px
+        }
+
+        .box-container .box-left .gallery-thumbs .swiper-wrapper {
+            justify-content: flex-start
+        }
+
+        .category-container {
+            overflow: unset
+        }
+
+        .f-search {
+            background-repeat: no-repeat;
+            background-image: url(Content/v4/images/iconhd6040.png?v=123);
+            background-size: auto
+        }
+
+        .f-search {
+            background-position: -7px -87px
+        }
+
+        .fs-ftcol1 {
+            padding: 0 12px
+        }
+
+        .fs-ftlink {
+            display: flex;
+            margin-bottom: 24px
+        }
+
+        .fs-ftlink a {
+            margin-left: 12px
+        }
+
+        .fs-ftlink img {
+            width: 24px
+        }
+
+        .fs-ftlink p {
+            padding: 2.5px 0;
+            font-weight: 500;
+            color: #444b52
+        }
+
+        .fs-ftlink a:first-child {
+            margin-left: 8px
+        }
+
+        .zalo-chat-widg {
+            bottom: 24px !important;
+            right: 40px !important
+        }
+
+        .icon-neo {
+            position: fixed;
+            right: 40px;
+            bottom: 95px;
+            z-index: 999
+        }
+
+        .icon-neo img {
+            width: 100px;
+            animation: zoom-in-zoom-out 1s ease infinite
+        }
+
+        @keyframes zoom-in-zoom-out {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(1.1, 1.1);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
+        }
+
+        .fs-header {
+            position: relative
+        }
+
+        .fs-header__top__search {
+            position: relative
+        }
+    </style>
+    <style>
+        .zalo-chat-widget {
+            right: 40px !important;
+            bottom: 24px !important
+        }
+
+        .cdt-filter__checklist .checkbox .wrap-checkItem label {
+            text-transform: none !important
+        }
+    </style>
+
+</body>
+
+
+</html>
+
+{% endblock main-content %}

@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    line-height: normal;
+  }
+  
+  :root {
+    /* fonts */
+    --font-roboto: Roboto;
+  
+    /* Colors */
+    --color-silver: #bdbdbd;
+    --color-black: #000;
+    --color-yellow: #e7f451;
+    --color-khaki: #f8fead;
+  }

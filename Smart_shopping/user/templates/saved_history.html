@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main-content %}
+<title>So sánh đã lưu</title>
+
+<!DOCTYPE html>
+{% for product in products %}
+    <div class="container mx-auto bg-white py-3 mt-md-4" style="max-width: 800px">
+        <div class="search-result-item product-item" data-name="{{ product.product_name }}">
+            <div class="product-info">
+                <div class="product-column">
+                    <div class="product-image">
+                        <img src="{{ product.product1.image }}" alt="{{ recent_history.product1 }}">
+                    </div>
+                    <div class="product-name">
+                        <p>{{ product.product1 }}</p>
+                    </div>
+                </div>
+                <div class="vs">
+                    <p>VS</p>
+                </div>
+                <div class="product-column">
+                    <div class="product-image">
+                        <img src="{{ product.product2.image }}" alt="{{ recent_history.product2 }}">
+                    </div>
+                    <div class="product-name">
+                        <p>{{ product.product2 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="divider">
+{% empty %}
+    <p>No results found</p>
+{% endfor %}
+
+<style>
+    .search-result-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .product-info {
+        display: grid;
+        grid-template-columns: auto auto auto; /* Chia thành 3 cột với tỷ lệ bằng nhau */
+        align-items: center;
+        gap: 10px;
+    }
+
+    .product-column {
+        display: flex;
+        flex-direction: row; /* Hiển thị các phần tử trong hàng ngang */
+        align-items: center; /* Căn chỉnh các phần tử trong hàng theo chiều dọc */
+    }
+
+    .product-image img {
+        max-width: 100px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+    .product-name {
+        margin: 0;
+    }
+
+    .vs {
+        text-align: center;
+    }
+
+    .divider {
+        margin: 10px 0;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+</style>
+
+{% endblock main-content %}

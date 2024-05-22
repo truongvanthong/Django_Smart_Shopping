@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% for product in products %}
+    <div class="search-result-item product-item" data-name="{{ product.product_name }}">
+        <div class="product-image">
+            <img src="{{ product.image }}" alt="{{ product.product_name }}">
+        </div>
+        <div class="product-name">
+            <p>{{ product.product_name }}</p>
+        </div>
+    </div>
+    <hr class="divider">
+{% empty %}
+    <p>No results found</p>
+{% endfor %}
+
+<style>
+    .search-result-item {
+        display: flex; /* Sử dụng flexbox để các phần tử con trong div hiển thị trên cùng một hàng */
+        align-items: center; /* Căn chỉnh các phần tử con theo chiều dọc */
+        margin-bottom: 10px; /* Khoảng cách dưới mỗi mục tìm kiếm */
+    }
+
+    .product-image img {
+        max-width: 20px; /* Độ rộng tối đa của hình ảnh */
+        height: auto; /* Chiều cao của hình ảnh tự điều chỉnh để giữ tỷ lệ */
+        margin-right: 10px; /* Khoảng cách bên phải giữa hình ảnh và văn bản */
+    }
+
+    .product-name {
+        margin: 0; /* Loại bỏ khoảng trắng xung quanh văn bản */
+    }
+    
+    .divider {
+        margin: 10px 0; /* Khoảng cách giữa dải ngăn cách và các phần tử */
+        border: none; /* Loại bỏ đường kẻ */
+        border-top: 1px solid #ccc; /* Tạo đường kẻ ngang */
+    }
+</style>

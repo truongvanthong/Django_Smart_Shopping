@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main-content %}
+<head>
+    <title>
+        Smart Shopping
+    </title>
+</head>
+<html lang="vi">
+<body data-token="ec4c8xg89pssoc40o0s8gokcwg88sg0">
+    <style>
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f198;
+            min-width: 160px;
+            padding: 12px 10px;
+            z-index: 1;
+        }
+
+        .user-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .user-dropdown {
+            display: flex;
+            align-items: baseline; /* Cân chỉnh các phần tử con dựa trên dòng cơ bản của văn bản */
+        }
+
+        .lg-name-view {
+            color: rgb(255, 255, 255);
+            margin: 12px 0 0 0; /* Thêm đơn vị đo(px) cho margin-top */
+            width: 415px;
+            font-size: 0.4em;
+            font-weight: 10; /* font-weight thường được chỉ định bằng các giá trị số từ 100 đến 900 */
+            text-align: right;
+            display: flex;
+            align-items: center; /* Hiển thị về giữa theo chiều dọc */
+            justify-content: flex-end; /* Hiển thị bên phải theo chiều ngang */
+            max-width: 100%;
+        }
+
+        .user-dropdown .lg-name-view {
+            color: rgb(255, 255, 255);
+            margin: 12px 0 0 0; /* Thêm đơn vị đo(px) cho margin-top */
+            width: 415px;
+            font-size: 0.4em;
+            font-weight: 10; /* font-weight thường được chỉ định bằng các giá trị số từ 100 đến 900 */
+            text-align: right;
+            display: flex;
+            align-items: center; /* Hiển thị về giữa theo chiều dọc */
+            justify-content: flex-end; /* Hiển thị bên phải theo chiều ngang */
+            max-width: 100%;
+        }
+
+        .logout {
+            color: rgb(0, 0, 0);
+            margin: 0 auto; /* Căn giữa nút logout */
+            font-size: 0.4em; /* Đổi kích thước font */
+            font-weight: normal; /* Khôi phục font-weight về giá trị mặc định */
+            display: block; /* Đặt nút logout thành block để căn giữa */
+            text-align: center; /* Căn giữa nội dung của nút logout */
+        }
+
+        .f-hdtop {
+            background-color: red;
+        }
+        .logo_name {
+            color:rgb(255, 225, 0);
+            margin: 0;
+            width: 415px;
+            position: relative;
+            font-size: inherit;
+            font-weight: 100;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            text-shadow: 1px 0 0#000, 0 1px 0#000, -1px 0 0#000, 0-1px 0#000;
+            max-width: 100%;
+            z-index: 2;
+        }
+
+        .f-wrap {
+            text-align: left;
+            font-size: 40px;
+            color: #000;
+        }
+        
+        .fs-header {
+            z-index: 100
+        }
+
+        .fs-header .f-hdtop .f-wrap {
+            overflow: unset !important
+        }
+
+        .fs-header {
+            position: relative
+        }
+
+        .fs-header__top__search {
+            position: relative
+        }
+
+        .f-hdtop {
+            z-index: 100
+        }
+
+        .fs-menu .f-wrap {
+            background: #252525
+        }
+        
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%; /* Tạo hình tròn */
+            background-color: #7e00f3; /* Màu sắc tùy chỉnh */
+            margin: 0 10px; /* Khoảng cách giữa các dấu chấm */
+        }
+
+    </style>
+
+        <main class="app-main pt-md-3 pt-3">
+            <div class="wrapper ">
+                <div class="page ">
+<section class="py-3 py-md-5 _bg-light larger-background" style="background: #FEEBC8;">
+    <div class="container container-fluid-xl">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-5 order-md-2 d-none d-lg-block">
+                <img class="img-fluid img-float-md-4 mb-3 mb-md-0" src="{% static 'assets/images/illustration/financial_data.svg' %}" alt="Lịch sử giá" width="1138" height="741" />
+            </div>
+            <div class="col-12 col-lg-7 order-lg-1">
+                <div class="col-fix pr-xl-3 ml-auto">
+                    <p class="lead mb-2"><strong>Bạn đang cần mua điện thoại?</strong> Muốn <strong>so sánh và lựa chọn</strong> một cách thông minh?</p>
+                    <h1 class="display-4 enable-responsive-font-size mb-3">Công cụ <strong style="color: #6b46c1;">so sánh sản phẩm </strong> cho TGDD và FPTShop</h1>
+                    <p class="mb-3">
+                        <span class="dot"></span>
+                        <span class="pr-2">So sánh thông số kỹ thuật</span>
+                        <span class="dot"></span>
+                        <span class="pr-2">So sánh giá cả</span>
+                        <span class="dot"></span>
+                        <span class="pr-2">Phân tích cảm xúc đánh giá</span>
+                    </p>
+                    <form action="/compare/" method="POST" class="d-md-flex w-100 form_product_url">
+                        <button type="submit" id="buttoncheck" class="btn btn-block btn-lg btn-success mb-2">So sánh ngay</button>
+                    </form>
+                    <div class="d-flex mt-3 home-store-logo">
+                        <div class="col-4 col-md-3 col-lg-2 mb-5">
+                            <img src="{% static 'img/tgdd.png' %}" alt="tgdd-logo" class="img-fluid  rounded" style="max-width: 70%;">
+                        </div>
+                        <div class="col-4 col-md-3 col-lg-2 mb-5">
+                            <img src="{% static 'img/fpt.png' %}" alt="fpt-logo" class="img-fluid  rounded" style="max-width: 110%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="process_lsg"></div>
+
+<div class="container">
+    <div class="row text-center text-md-left">
+        <div class="col-6 col-md-3 py-4 text-center">
+            <img class="mb-4 " src="{% static 'assets/images/illustration/lab.svg' %}" alt="" height="72">
+            <h2 class="lead"> Đơn giản & đầy đủ </h2>
+        </div>
+        <div class="col-6 col-md-3 py-4 text-center">
+            <img class="mb-4 " src="{% static 'assets/images/illustration/easy-config.svg' %}" alt="" height="72">
+            <h2 class="lead"> Dễ sử dụng </h2>
+        </div>
+        <div class="col-6 col-md-3 py-4 text-center">
+            <img class="mb-4 " src="{% static 'assets/images/illustration/scale.svg' %}" alt="" height="72">
+            <h2 class="lead"> Dữ liệu mới nhất </h2>
+        </div>
+        <div class="col-6 col-md-3 py-4 text-center">
+            <img class="mb-4 " src="{% static 'assets/images/illustration/support.svg' %}" alt="" height="72">
+            <h2 class="lead"> Chính xác cao </h2>
+        </div>
+    </div>
+</div>
+
+<section class="position-relative py-3 bg-white">
+    <div class="container position-relative mb-3">
+        <h2 class="text-center"> Có sẵn cho </h2>
+        <p class="text-center text-muted font-size-lg mb-5"> Với dữ liệu từ các trang bán lẻ lớn Thế giới di động, FPTShop giúp bạn có cái nhìn khách quan nhất.</p>
+        <div class="row mb-3">
+            <div class="col-12 col-md-8 offset-md-2 py-3">
+                <div class="row justify-content-center text-center">
+                    <div class="col-4 col-md-3 _col-lg-2 mb-5">
+                        <img src="{% static 'img/tgdd.png' %}" alt="tgdd-logo" style="max-height: 64px">
+                    </div>
+                    <div class="col-4 col-md-3 col-lg-2 mb-5">
+                        <img src="{% static 'img/fpt.png' %}" alt="fpt-logo" class="img-fluid " style="max-height: 64px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="position-relative py-4 bg-light">
+    <div class="sticker">
+        <div class="sticker-item sticker-top-right sticker-soften">
+            <img class="" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="/assets/images/decoration/cubes.svg" alt="">
+        </div>
+        <div class="sticker-item sticker-bottom-left sticker-soften scale-150">
+            <img class="" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="/assets/images/decoration/cubes.svg" alt="">
+        </div>
+    </div>
+    <div class="container position-relative">
+        <h2 class="text-center text-sm-left"> Tính năng nổi bật </h2>
+        <p class="lead text-muted text-center text-sm-left mb-5"></p>
+        <div class="card-deck-lg">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="d-sm-flex align-items-start text-center text-sm-left">
+                        <img src="{% static 'assets/images/illustration/visual_data.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                        <div class="flex-fill">
+                            <h5 class="mt-0"> So sánh sản phẩm </h5>
+                            <p class="text-muted font-size-lg"> Khi phân vân giữa 2 sản phẩm? Hãy sử dụng tính năng so sánh trước. Đưa ra lựa chọn tối ưu khi mua sắm.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="d-sm-flex align-items-start text-center text-sm-left">
+                        <img src="{% static 'assets/images/illustration/data_2.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                        <div class="flex-fill">
+                            <h5 class="mt-0"> So sánh giá </h5>
+                            <p class="text-muted font-size-lg"> So sánh giá của sản phẩm trên Thế giới di dộng và FPTShop. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-deck-lg">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="d-sm-flex align-items-start text-center text-sm-left">
+                        <img src="{% static 'assets/images/illustration/online_shopping.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                        <div class="flex-fill">
+                            <h5 class="mt-0"> Tổng quan đánh giá </h5>
+                            <p class="text-muted font-size-lg"> Phân tích điểm trung bình của đánh giá theo chiều huớng tính cực/tiêu cực/trung lập, giúp bạn dễ dàng hiểu đuợc ưu điểm và nhược điểm của sản phẩm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="d-sm-flex align-items-start text-center text-sm-left">
+                        <img src="{% static 'assets/images/illustration/trends.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                        <div class="flex-fill">
+                            <h5 class="mt-0"> So sánh yêu thích </h5>
+                            <p class="text-muted font-size-lg"> Bạn có thể lên danh sách các cặp sản phẩm so sánh yêu thích của mình để không phải tìm kiếm lại trong tương lai.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-deck-lg">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="d-sm-flex align-items-start text-center text-sm-left">
+                        <img src="{% static 'assets/images/illustration/search_engines.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                        <div class="flex-fill">
+                            <h5 class="mt-0"> Miễn phí </h5>
+                            <p class="text-muted font-size-lg"> Chúng tôi sẽ không tính phí bạn khi sử dụng bất kỳ tính năng nào của chúng tôi. Chúng tôi kiếm tiền qua tiếp thị sản phẩm và quảng cáo. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="d-sm-flex align-items-start text-center text-sm-left">
+                        <img src="{% static 'assets/images/illustration/server_status.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                        <div class="flex-fill">
+                            <h5 class="mt-0"> Hỗ trợ tích cực </h5>
+                            <p class="text-muted font-size-lg"> Có bất kỳ vấn đề hoặc phản hồi? Liên hệ với chúng tôi qua email của chúng tôi, chúng tôi sẽ cung cấp cho bạn sự trợ giúp tốt nhất. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="position-relative py-3 bg-white">
+    <div class="sticker">
+        <div class="sticker-item sticker-bottom-left sticker-soften">
+            <img class="" src="{% static 'assets/images/decoration/bubble2.svg' %}" alt="">
+        </div>
+    </div>
+    <div class="container position-relative">
+        <h2 class="text-center text-sm-left"> Được xây dựng bởi </h2>
+        <p class="lead text-muted text-center text-sm-left mb-5"></p>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <a class="card shadow aos-init aos-animate text-decoration-none">
+            <div class="card-body p-4">
+                <div class="d-sm-flex align-items-start text-center text-sm-left">
+                    <img src="{% static 'assets/images/illustration/easy-config.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                    <div class="flex-fill">
+                        <h5 class="mt-0"> Trương Văn Thông </h5>
+                        <p class="text-muted font-size-lg">20001955</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <a class="card shadow aos-init aos-animate text-decoration-none">
+            <div class="card-body p-4">
+                <div class="d-sm-flex align-items-start text-center text-sm-left">
+                    <img src="{% static 'assets/images/illustration/easy-config.svg' %}" class="mr-sm-4 mb-3 mb-sm-0 " alt="" width="72">
+                    <div class="flex-fill">
+                        <h5 class="mt-0"> Nguyễn Chí Nguyện </h5>
+                        <p class="text-muted font-size-lg">20123531</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+    </div>
+</section><section class="position-relative py-3 bg-white">
+    <div class="sticker">
+        <div class="sticker-item sticker-bottom-left sticker-soften">
+            <img class="" src="{% static '/assets/images/decoration/bubble2.svg' %}" alt="">
+        </div>
+    </div>
+    <div class="py-3 my-6"></div>
+    <div class="container position-relative mt-4 mb-5">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 offset-lg-1 mr-md-0">
+                <div class="card shadow-none rounded-lg mb-0 mr-md-n5 mt-md-n5 scale-125">
+                    <img class="img-fluid rounded-lg " src="{% static '/assets/images/decoration/quote.svg' %}" alt="">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-5 ml-md-0">
+                <div class="card shadow-lg rounded-lg p-4 ml-md-n5 mt-md-5">
+                    <blockquote class="blockquote text-center border-0 p-3 p-md-4">
+                        <figure>
+                            <img class="mr-2" src="{% static '/assets/images/decoration/quote.svg' %}" alt="" height="32">
+                        </figure>
+                        <p class="mb-0">Ứng dụng đơn giản miễn phí và có thể giúp bạn lựa chọn sản phẩm tốt nhất. Nó thật tuyệt - và tôi thực sự khuyên bạn nên thử nó!</p>
+                        <footer class="blockquote-footer"> Thông Admin, <cite title="Lịch Sử Giá">Smart Shopping</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+</body>
+
+</html>
+{% endblock main-content %}
